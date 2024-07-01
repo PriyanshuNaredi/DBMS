@@ -166,6 +166,7 @@ DELETE FROM student WHERE rollno = 105;
 -- Foreign Key
 CREATE TABLE dept ( id INT PRIMARY KEY, name VARCHAR(50) );
 
+
 CREATE TABLE teacher (
     id INT PRIMARY KEY,
     name VARCHAR(50),
