@@ -1,3 +1,4 @@
+-- Active: 1719732080902@@127.0.0.1@3306@college
 CREATE DATABASE temp1;
 
 DROP DATABASE temp1;
@@ -166,21 +167,90 @@ DELETE FROM student WHERE rollno = 105;
 -- Foreign Key
 CREATE TABLE dept ( id INT PRIMARY KEY, name VARCHAR(50) );
 
+INSERT INTO dept VALUES (101, "english"), (102, "IT");
+
+SELECT * from dept;
 
 CREATE TABLE teacher (
     id INT PRIMARY KEY,
     name VARCHAR(50),
     dept_id INT,
-    FOREIGN KEY (dept_id) REFERENCES dept (id)
+    FOREIGN KEY (dept_id) REFERENCES dept (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+INSERT INTO teacher VALUES (101, "Adam", 101), (102, "Eve", 102);
+
+UPDATE dept SET id = 103 WHERE id = 102;
+
+-- Alter Table
+
+ALTER TABLE student ADD COLUMN age VARCHAR(2) NOT NULL DEFAULT 20;
+
+ALTER TABLE student DROP COLUMN age;
+
+ALTER TABLE student MODIFY COLUMN age INT;
+
+ALTER TABLE student CHANGE age stu_age INT;
+
+INSERT INTO
+    student (rollno, name, marks, age)
+VALUES (107, "grey", 68, 100);
+
+ALTER TABLE student DROP COLUMN stu_age;
+
+ALTER TABLE student RENAME TO student;
+
+TRUNCATE TABLE student;
+
+-- SQL Sub Queries
+
+SELECT AVG(marks) FROM student;
+-- AVG - 87.6667
+SELECT name, marks from student WHERE marks > 87.6667;
+
+SELECT name, marks
+from student
+WHERE
+    marks > (
+        SELECT AVG(marks)
+        FROM student
+    );
+
+SELECT name, rollno FROM student WHERE rollno IN (102, 106, 104);
+
+SELECT rollno FROM student WHERE rollno % 2 = 0;
+
+SELECT name, rollno
+FROM student
+WHERE
+    rollno IN (
+        SELECT rollno
+        FROM student
+        WHERE
+            rollno % 2 = 0
+    );
+--  IN is used to compare from a list
+
+SELECT * FROM student WHERE city = "delhi";
+
+-- When we take some part of table table like city = Delhi then 
+SELECT MAX(marks) FROM (SELECT * FROM student WHERE city = "delhi") AS temp; 
+-- ** Use of alias is must in FROM type sub queries
 
 
+SELECT (SELECT MAX(marks) FROM student), name FROM student;
 
 
+-- Views
 
+CREATE View view1 AS SELECT rollno, name, marks FROM student;
 
+SELECT * FROM view1;
 
+SELECT * FROM view1 WHERE marks>90;
 
+DROP View view1;
+
+SELECT * FROM view1; -- Error: Table 'college.view1' doesn't exist
 
 
